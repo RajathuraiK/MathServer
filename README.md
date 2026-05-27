@@ -113,5 +113,9 @@ def gst_amt_calc(request):
 
 ![alt text](image.png)
 
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
 ## RESULT:
 The a web page to calculate total bill amount with GST from price and GST percentage using server-side scripts is created successfully.
