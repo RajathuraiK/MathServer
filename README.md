@@ -44,12 +44,74 @@ Publish the website in Localhost.
 
 ## PROGRAM:
 
+### bill.html
+
+```
+<html>
+<head>
+    <title>GST Calculator</title>
+</head>
+<body>
+
+    <form method="post">
+    <h2>GST Calculator</h2>
+
+        {% csrf_token %}
+        <label for="price">Price :</label>
+        <input type="text" name="price" required><br><br>
+
+        <label for="gst">GST (%):</label>
+        <input type="text" name="gst" required><br><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if gst_amt is not None %}
+        <h2>Result:</h2>
+        {% if "Error" in gst_amt|stringformat:"s" %}
+            <p style="color: red;">{{ gst_amt }}</p>
+        {% else %}
+            <p>GST: {{ gst_amt|stringformat:".2f" }}</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
+```
+###views.py
+
+```
+from django.shortcuts import render
+
+def gst_amt_calc(request):
+    gst_amt = None
+    if request.method == 'POST':
+        try:
+            price = float(request.POST.get('price'))
+            gst = float(request.POST.get('gst'))
+           
+            if price >= 0 and gst >= 0:
+                gst_amt = price + ((price * gst) / 100)
+            else:
+                gst_amt = "Error: Inputs cannot be negative."
+        except ValueError:
+            gst_amt = "Error: Invalid input. Please enter numeric values."
+
+    # Pass the result to the template
+    context = {
+        'gst_amt': gst_amt
+    }
+    return render(request, 'bill.html', context)
+
+```
+
 
 ## OUTPUT - SERVER SIDE:
 
+![alt text](image-1.png)
 
 ## OUTPUT - WEBPAGE:
 
+![alt text](image.png)
 
 ## RESULT:
 The a web page to calculate total bill amount with GST from price and GST percentage using server-side scripts is created successfully.
